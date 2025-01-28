@@ -1,7 +1,11 @@
 const express = require("express")
 
 const app = express()
+const tasks = require("./routes/tasks")
+
 // routes
+
+app.use("api/v1/task", tasks)
 app.get("/hello", (req, res) => {
   res.send("Task Manager App")
 })
