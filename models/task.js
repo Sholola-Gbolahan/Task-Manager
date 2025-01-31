@@ -5,9 +5,12 @@ const TaskSchema = new mongoose.Schema({
     type: String,
     required: [true, "You must provide name"],
     trim: true,
-    maxLength: [20, "name cannot be more than 20 characters"],
+    maxlength: [20, "name cannot be more than 20 characters"],
   },
-  completed: Boolean,
+  completed: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 module.exports = mongoose.model("Task", TaskSchema)
