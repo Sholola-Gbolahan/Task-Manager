@@ -6,11 +6,7 @@ const connectDB = require("./db/connect")
 
 // middleware
 app.use(express.json())
-
-// routes
-app.get("/hello", (req, res) => {
-  res.send("Task Manger App")
-})
+app.use(express.static("./public"))
 
 app.use("/api/v1/tasks", tasks)
 
