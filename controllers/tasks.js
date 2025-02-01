@@ -18,10 +18,21 @@ const createTask = async (req, res) => {
   }
 }
 
-const getTask = (req, res) => {
-  res.json({ id: req.params.id })
+const getTask = async (req, res) => {
+  try {
+    // Destructing The id from req.params and setup a useful alias of "taskID" to make the ID unique to task
+    const { id: taskID } = req.params
+    const task = await Task.findOne({ _id: taskID })
+    // Sending a message if task not exist.
+    if (!task) {
+      return res.status(404).json({ msg: `no task with id : ${taskID}` })
+    }
+    // Sending back task of the ID
+    res.status(200).json({ task })
+  } catch (error) {
+    res.status(500).json({ msg: error })
+  }
 }
-
 const updateTask = (req, res) => {
   res.send("Update Task")
 }
@@ -29,7 +40,6 @@ const updateTask = (req, res) => {
 const deleteTask = (req, res) => {
   res.send("Delete Task")
 }
-
 module.exports = {
   getAllTasks,
   getTask,
