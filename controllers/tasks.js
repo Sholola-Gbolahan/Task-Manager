@@ -14,12 +14,16 @@ const createTask = asyncWrapper(async (req, res) => {
 })
 
 // GETTING A TASK
-const getTask = asyncWrapper(async (req, res) => {
+const getTask = asyncWrapper(async (req, res, next) => {
   // Destructing The id from req.params and setup a useful alias of "taskID" to make the ID unique to task
   const { id: taskID } = req.params
   const task = await Task.findOne({ _id: taskID })
+
   // Sending a message if task not exist.
   if (!task) {
+    const error = new Error("not found")
+    error.status = 404
+    return next(error)
     return res.status(404).json({ msg: `no task with id : ${taskID}` })
   }
   // Sending back task of the ID
