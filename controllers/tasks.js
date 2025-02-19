@@ -1,6 +1,6 @@
 const asyncWrapper = require("../middleware/async")
 const Task = require("../models/task")
-
+const { createCustomError } = require("../errors/custom-error")
 //  GETTING ALL TASK
 const getAllTasks = asyncWrapper(async (req, res) => {
   const task = await Task.find({})
@@ -21,10 +21,8 @@ const getTask = asyncWrapper(async (req, res, next) => {
 
   // Sending a message if task not exist.
   if (!task) {
-    const error = new Error("not found")
-    error.status = 404
-    return next(error)
-    return res.status(404).json({ msg: `no task with id : ${taskID}` })
+    // next used to pass the error message down to error handler middleware
+    return next(createCustomError(`No task with id : ${taskID}`, 404))
   }
   // Sending back task of the ID
   res.status(200).json({ task })
